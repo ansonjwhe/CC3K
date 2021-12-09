@@ -1,4 +1,8 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include "character.h"
+#include "enemy.h"
 
 class Player: public Character {
     public:
@@ -14,3 +18,5 @@ class Player: public Character {
         void consume(MerchantHoard);
         void consume(DragonHoard);
 };
+
+#endif
