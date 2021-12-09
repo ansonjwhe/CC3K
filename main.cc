@@ -38,7 +38,7 @@ int main() {
             std::cout << "Invalid Command." << std::endl << std::endl;
             selectedPC = promptPC();
         }
-
+        // valid PC race or 'q' has been selected
         if (selectedPC == 'q') {
             return 0;
         } else {
