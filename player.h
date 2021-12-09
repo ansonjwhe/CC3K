@@ -1,7 +1,9 @@
-class Player{
+#include "character.h"
+
+class Player: public Character {
     public:
-        void strike(Enemy);
-        void hitBy(Enemy) = 0;
+        virtual void strike(Enemy) = 0;
+        virtual void hitBy(Enemy) = 0;
         void consume(RH);
         void consume(BA);
         void consume(BD);

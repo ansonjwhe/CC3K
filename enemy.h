@@ -1,5 +1,7 @@
-class Enemy{
+#include "character.h"
+
+class Enemy: public Character {
     public: 
-        void strike(Player);
-        void hitBy(Player) = 0;
+        virtual void strike(Player) = 0;
+        virtual void hitBy(Player) = 0;
 };

@@ -1,3 +1,5 @@
+#include "player.h"
+
 class Item{
-  void consumedBy(Player) = 0;  
+  virtual void consumedBy(Player) = 0;  
 };
