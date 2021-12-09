@@ -1,4 +1,4 @@
 class Game {
     public:
-        void startGame(char playerRace);
-}
+        int startGame(char playerRace);
+};
