@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -MMD
-EXEC = hello
-OBJECTS = 
+EXEC = CC3K
+OBJECTS = main.o game.o floor.o chamber.o cell.o player.o enemy.o item.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
