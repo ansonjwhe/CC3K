@@ -1,10 +1,14 @@
 #include "game.h"
 #include "floor.h"
+#include <iostream>
 
 Game::Game() {}
 
-int Game::startGame(char playerRace) {
-    //initialize floor
+
+exitCodes Game::startGame(std::string playerRace) {
+    // for (int i=0; i<5; i++) {
+    //     floor = Floor();
+    // }
     floor.draw();
-    return 0;
+    return Win;
 }

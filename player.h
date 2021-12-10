@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "character.h"
-#include "enemy.h"
+class Enemy;
 
 class Player: public Character {
     public:
