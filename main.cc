@@ -50,8 +50,14 @@ bool interpretExitCode(exitCodes exitCode) {
     }
 }
 
-int main() {
+int main(int argc, char** argv) {
     Game game;
+    if (argc == 1) {
+        game.loadFloors("plain", false);
+    } else if (argc == 2) {
+        game.loadFloors(argv[1], true);
+    }
+
     std::string selectedPC;
 
     while (true) {

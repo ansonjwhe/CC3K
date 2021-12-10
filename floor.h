@@ -21,9 +21,14 @@ class Floor{
     
     public:
         Floor();
+        int getNumRows();
+        int getNumCols();
+        std::shared_ptr<Cell> getCell(int row, int col);
+        void setCell(int row, int col, char c);
         void movePlayer(Player, std::string dir);
         Cell getRandomAdjacentCell(Cell);
         int getRandomChamber(int playerChamber);
+        bool isPCOnStairway(Player);
         void draw();
 };
 
