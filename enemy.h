@@ -6,46 +6,61 @@
 class Player;
 
 class Enemy: public Character {
-    public: 
+    public:
+        Enemy(int h, int a, int d); 
         virtual void strike(Player) = 0;
         virtual void hitBy(Player) = 0;
 };
 
 class Halfling: public Enemy {
-    void strike(Player);
-    void hitBy(Player);
+    public:
+        Halfling();
+        void strike(Player);
+        void hitBy(Player);
 };
 
 class Human: public Enemy {
-    void strike(Player);
-    void hitBy(Player);
+    public:
+        Human();
+        void strike(Player);
+        void hitBy(Player);
 };
 
 class Dwarf: public Enemy {
-    void strike(Player);
-    void hitBy(Player);
+    public:
+        Dwarf();
+        void strike(Player);
+        void hitBy(Player);
 };
 
 class Elf: public Enemy {
-    void strike(Player);
-    void strike(Drow);
-    void hitBy(Player);
+    public:
+        Elf();
+        void strike(Player);
+        void strike(Drow);
+        void hitBy(Player);
 };
 
 class Orcs: public Enemy {
-    void strike(Player);
-    void strike(Goblin);
-    void hitBy(Player);
+    public:
+        Orcs();
+        void strike(Player);
+        void strike(Goblin);
+        void hitBy(Player);
 };
 
 class Merchant: public Enemy {
-    void strike(Player);
-    void hitBy(Player);
+    public:
+        Merchant();
+        void strike(Player);
+        void hitBy(Player);
 };
 
 class Dragon: public Enemy {
-    void strike(Player);
-    void hitBy(Player);
+    public:
+        Dragon();
+        void strike(Player);
+        void hitBy(Player);
 };
 
 #endif
