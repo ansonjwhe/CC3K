@@ -17,6 +17,7 @@ Floor::Floor() {
         std::istringstream iss{line};
         for (int j=0; j<numCols; j++) {
             iss >> std::noskipws >> c;
+            // interpretObject(c);
             grid[i][j] = std::make_shared<Cell>(c);
         }
     }
