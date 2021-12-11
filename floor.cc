@@ -49,6 +49,22 @@ int Floor::getRandomChamber(int playerChamber)
     return chambers[chosenRandom];
 }
 
+std::shared_ptr<Cell> Floor::getStart() {
+    return start;
+}
+void Floor::setStart(std::shared_ptr<Cell> pos) {
+    start = pos;
+}
+
+void Floor::setStairway(std::shared_ptr<Cell> pos) {
+    stairway = pos;
+}
+
+bool Floor::isPCOnStairway(std::shared_ptr<Cell> pos) {
+    return stairway == pos;
+}
+
+
 void Floor::draw()
 {
     for (int i = 0; i < numRows; i++)

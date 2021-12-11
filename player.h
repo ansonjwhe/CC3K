@@ -1,9 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-
 #include "character.h"
+#include <memory>
 class Enemy;
-
+class Cell;
 class RH;
 class BA;
 class BD;
@@ -16,7 +16,7 @@ class MerchantHoard;
 class DragonHoard;
 class Player: public Character {
     public:
-        Player(int h, int a, int d, std::shared_ptr<Cell> pos);
+        Player(int h, int a, int d);
         void displayStats();
         void strike(Enemy); // virtual
         void hitBy(Enemy); // virtual
@@ -34,28 +34,28 @@ class Player: public Character {
 
 class Shade: public Player {
     public: 
-        Shade(std::shared_ptr<Cell> pos);
+        Shade();
 };
 
 class Drow: public Player {
     public: 
-        Drow(std::shared_ptr<Cell> pos);
+        Drow();
 };
 
 class Vampire: public Player {
     public: 
-        Vampire(std::shared_ptr<Cell> pos);
+        Vampire();
         void strike(Enemy);
         void hitBy(Enemy);
 };
 
 class Troll: public Player {
     public: 
-        Troll(std::shared_ptr<Cell> pos);
+        Troll();
 };
 
 class Goblin: public Player {
     public: 
-        Goblin(std::shared_ptr<Cell> pos);
+        Goblin();
 };
 #endif

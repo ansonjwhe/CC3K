@@ -7,23 +7,13 @@
 
 Game::Game() {}
 
-void Game::interpretChar(std::shared_ptr<Cell> pos, char c) {
+void Game::interpretChar(int floorNum, std::shared_ptr<Cell> pos, char c) {
     switch (c) {
         case '@':
-            if (pcRace == "s") {
-                player = std::make_unique<Shade>(pos);
-            } else if (pcRace == "d") {
-                player = std::make_unique<Drow>(pos);
-            } else if (pcRace == "v") {
-                player = std::make_unique<Vampire>(pos);
-            } else if (pcRace == "t") {
-                player = std::make_unique<Troll>(pos);
-            } else if (pcRace == "g") {
-                player = std::make_unique<Goblin>(pos);
-            }
+            floors[floorNum].setStart(pos);
             break;
         case '\\':
-            // generate stairway
+            floors[floorNum].setStairway(pos);
             break;
         default:
             break;
@@ -62,7 +52,7 @@ void Game::loadCustomFloors(std::string fileName) {
             for (int j=0; j<floors[floorNum].getNumCols(); j++) {
                 iss >> std::noskipws >> c;
                 floors[floorNum].setCell(i, j, c);
-                interpretChar(floors[floorNum].getCell(i, j), c);
+                interpretChar(floorNum, floors[floorNum].getCell(i, j), c);
             }
         }
     }
@@ -81,11 +71,25 @@ void Game::loadFloors(std::string fileName, bool isCustom) {
     }
 }
 
+void Game::setPlayer(std::string playerRace) {
+    if (playerRace == "s") {
+        player = std::make_shared<Shade>();
+    } else if (playerRace == "d") {
+        player = std::make_shared<Drow>();
+    } else if (playerRace == "v") {
+        player = std::make_shared<Vampire>();
+    } else if (playerRace == "t") {
+        player = std::make_shared<Troll>();
+    } else if (playerRace == "g") {
+        player = std::make_shared<Goblin>();
+    }
+}
 
 exitCodes Game::startGame(std::string playerRace) {
-    pcRace = playerRace;
+    setPlayer(playerRace);
     curFloor = 0;
     for (int i=0; i<5; i++) {
+        player->setPos(floors[i].getStart());
         floors[i].draw();
         std::cout << "Race: Shade Gold: 0" << std::setw(50) << "Floor 0" << std::endl;
         player->displayStats();
