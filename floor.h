@@ -29,7 +29,8 @@ class Floor{
         std::shared_ptr<Cell> getCell(int row, int col);
         void setCell(int row, int col, char c);
 
-        void movePlayer(Player &, std::string dir);
+        bool isValidMove(std::shared_ptr<Cell> pos, std::string dir);
+        std::shared_ptr<Cell> movePlayer(std::shared_ptr<Cell> pos, std::string dir);
 
         Cell getRandomAdjacentCell(Cell);
         int getRandomChamber(int playerChamber);

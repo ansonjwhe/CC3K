@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <array>
 #include "floor.h"
 #include "cell.h"
 
@@ -32,7 +33,7 @@ std::shared_ptr<Cell> Floor::getCell(int row, int col)
 
 void Floor::setCell(int row, int col, char c)
 {
-    grid[row][col] = std::make_shared<Cell>(c);
+    grid[row][col] = std::make_shared<Cell>(row, col, c);
 }
 
 int Floor::getRandomChamber(int playerChamber)
@@ -64,6 +65,65 @@ bool Floor::isPCOnStairway(std::shared_ptr<Cell> pos) {
     return stairway == pos;
 }
 
+std::array<int, 2> interpretDirection(std::string dir) {
+    std::array<int, 2> result;
+    if (dir == "no") {
+        result[0] = -1;
+        result[1] = 0;
+    } else if (dir == "so") {
+        result[0] = 1;
+        result[1] = 0;
+    } else if (dir == "ea") {
+        result[0] = 0;
+        result[1] = 1;
+    } else if (dir == "we") {
+        result[0] = 0;
+        result[1] = -1;
+    } else if (dir == "ne") {
+        result[0] = -1;
+        result[1] = 1;
+    } else if (dir == "nw") {
+        result[0] = -1;
+        result[1] = -1;
+    } else if (dir == "se") {
+        result[0] = 1;
+        result[1] = 1;
+    } else if (dir == "sw") {
+        result[0] = 1;
+        result[1] = -1;
+    }
+    return result;
+}
+
+bool Floor::isValidMove(std::shared_ptr<Cell> pos, std::string dir) {
+    std::array<int, 2> dirInts = interpretDirection(dir);
+    int deltaRow = dirInts[0];
+    int deltaCol = dirInts[1];
+    int row = pos->getRow();
+    int col = pos->getCol();
+    
+    // get val in specified direction
+    char val = grid[row+deltaRow][col+deltaCol]->getVal();
+    return (val == '.') || (val == '+') || (val == '#') || (val == '\\') || (val == 'G');
+}
+
+std::shared_ptr<Cell> Floor::movePlayer(std::shared_ptr<Cell> pos, std::string dir) {
+    std::array<int, 2> dirInts = interpretDirection(dir);
+    int deltaRow = dirInts[0];
+    int deltaCol = dirInts[1];
+    int row = pos->getRow();
+    int col = pos->getCol();
+
+    // set prev player position to true val (either '.', '+', or '#')
+    pos->setVal(pos->getTrueVal());
+
+    // get new player position
+    std::shared_ptr<Cell> newPos = grid[row+deltaRow][col+deltaCol];
+
+    // set player position val to '@'
+    newPos->setVal('@');
+    return newPos;
+}
 
 void Floor::draw()
 {

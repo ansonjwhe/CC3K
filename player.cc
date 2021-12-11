@@ -19,6 +19,10 @@ int Player::getGold() {
     return gold;
 }
 
+int Player::getScore() {
+    return score;
+}
+
 void Vampire::strike(Enemy e) {
 
 }

@@ -17,7 +17,8 @@ class DragonHoard;
 class Player: public Character {
     int batk = 0;
     int bdef = 0;
-    int gold = 0;
+    int score = 0; // increments with gold, never decreases
+    int gold = 0; // can decrease when buying from merchant
     public:
         Player(int h, int a, int d);
         void displayStats();
@@ -34,6 +35,7 @@ class Player: public Character {
         void consume(MerchantHoard);
         void consume(DragonHoard);
         int getGold();
+        int getScore();
 };
 
 class Shade: public Player {

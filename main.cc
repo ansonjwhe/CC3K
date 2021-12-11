@@ -28,14 +28,14 @@ bool promptPlayAgain() {
     }
 }
 
-bool interpretExitCode(exitCodes exitCode) {
+bool interpretExitCode(exitCodes exitCode, int score) {
     switch(exitCode) {
         case Lose:
-            std::cout << "Game Lost! Show game score here" << std::endl;
+            std::cout << "Game Lost! Score: " << score << std::endl;
             return promptPlayAgain();
 
         case Win:
-            std::cout << "Game Won! Show game score here" << std::endl;
+            std::cout << "Game Won! Score: " << score << std::endl;
             return promptPlayAgain();
 
         case Restart:
@@ -51,12 +51,6 @@ bool interpretExitCode(exitCodes exitCode) {
 }
 
 int main(int argc, char** argv) {
-    Game game;
-    if (argc == 1) {
-        game.loadFloors("plain", false);
-    } else if (argc == 2) {
-        game.loadFloors(argv[1], true);
-    }
 
     std::string selectedPC;
 
@@ -70,8 +64,14 @@ int main(int argc, char** argv) {
         if (selectedPC == "q") {
             return 0;
         } else {
+            Game game;
+            if (argc == 1) {
+                game.loadFloors("plain", false);
+            } else if (argc == 2) {
+                game.loadFloors(argv[1], true);
+            }
             exitCodes exitCode = game.startGame(selectedPC);
-            bool playAgain = interpretExitCode(exitCode);
+            bool playAgain = interpretExitCode(exitCode, game.getScore());
             if (!playAgain) {
                 return 0;
             }
