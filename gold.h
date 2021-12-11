@@ -2,13 +2,10 @@
 #define GOLD_H
 
 #include "item.h"
-#include <memory>
 
 class Player;
 
 class Gold : public Item {
-    int val;
-    std::shared_ptr<Cell> pos;
     public:
         Gold(int v, std::shared_ptr<Cell> pos);
         void consumedBy(Player); // virtual
