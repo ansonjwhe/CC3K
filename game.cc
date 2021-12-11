@@ -71,28 +71,46 @@ void Game::loadFloors(std::string fileName, bool isCustom) {
     }
 }
 
-void Game::setPlayer(std::string playerRace) {
-    if (playerRace == "s") {
+void Game::setPlayer(std::string pcRace) {
+    if (pcRace == "s") {
+        playerRace = "Shade";
         player = std::make_shared<Shade>();
-    } else if (playerRace == "d") {
+    } else if (pcRace == "d") {
+        playerRace = "Drow";
         player = std::make_shared<Drow>();
-    } else if (playerRace == "v") {
+    } else if (pcRace == "v") {
+        playerRace = "Vampire";
         player = std::make_shared<Vampire>();
-    } else if (playerRace == "t") {
+    } else if (pcRace == "t") {
+        playerRace = "Troll";
         player = std::make_shared<Troll>();
-    } else if (playerRace == "g") {
+    } else if (pcRace == "g") {
+        playerRace = "Goblin";
         player = std::make_shared<Goblin>();
     }
 }
 
-exitCodes Game::startGame(std::string playerRace) {
-    setPlayer(playerRace);
+void Game::drawTurn(int floorNum) {
+    floors[floorNum].draw();
+    std::cout << "Race: " << playerRace << "      Gold: " << player->getGold();
+    std::cout << std::setw(60 - playerRace.length() - std::to_string(player->getGold()).length())
+    std::cout << "Floor " << floorNum+1 << std::endl;
+    player->displayStats();
+    std::cout << "Action: insert last turn's events here." << std::endl;
+}
+
+exitCodes Game::startGame(std::string pcRace) {
+    std::string command;
+
+    setPlayer(pcRace);
     curFloor = 0;
     for (int i=0; i<5; i++) {
         player->setPos(floors[i].getStart());
-        floors[i].draw();
-        std::cout << "Race: Shade Gold: 0" << std::setw(50) << "Floor 0" << std::endl;
-        player->displayStats();
+        while (!floors[i].isPCOnStairway(player->getPos())) {
+            drawTurn(i);
+            std::getline(std::cin, command);
+            
+        }
     }
     return Win;
 }

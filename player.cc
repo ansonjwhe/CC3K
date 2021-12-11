@@ -15,6 +15,10 @@ void Player::displayStats() {
     std::cout << "Def: " << def << std::endl;
 }
 
+int Player::getGold() {
+    return gold;
+}
+
 void Vampire::strike(Enemy e) {
 
 }
