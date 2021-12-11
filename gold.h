@@ -1,7 +1,42 @@
 #ifndef GOLD_H
 #define GOLD_H
-class Gold : class Item {
-    void consumedBy(Player) = 0;
+
+#include "item.h"
+#include <memory>
+
+class Player;
+
+class Gold : public Item {
+    int val;
+    std::shared_ptr<Cell> pos;
+    public:
+        Gold(int v, std::shared_ptr<Cell> pos);
+        void consumedBy(Player); // virtual
+};
+
+class SmallPile : public Gold {
+    public:
+        SmallPile(std::shared_ptr<Cell> pos);
+        void consumedBy(Player);
+};
+
+class NormalPile : public Gold {
+    public:
+        NormalPile(std::shared_ptr<Cell> pos);
+        void consumedBy(Player);
+};
+
+class MerchantHoard : public Gold {
+    public:
+        MerchantHoard(std::shared_ptr<Cell> pos);
+        void consumedBy(Player);
+};
+
+class DragonHoard : public Gold {
+    bool slain;
+    public:
+        DragonHoard(std::shared_ptr<Cell> pos);
+        void consumedBy(Player);
 };
 
 #endif
