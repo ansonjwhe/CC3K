@@ -15,6 +15,8 @@ void Game::interpretChar(int floorNum, std::shared_ptr<Cell> pos, char c) {
         case '\\':
             floors[floorNum].setStairway(pos);
             break;
+        case 'E':
+            // initialize enemy
         default:
             break;
     }
@@ -64,10 +66,10 @@ void Game::loadFloors(std::string fileName, bool isCustom) {
         
     } else {
         loadPlainFloors(fileName);
-        // call victor's algorithm for generating chambers
-        // iterate through each cell in a floor
-        // if a cell is a "valid" floor tile (may by @, \, 0, 1, etc.)
-        // generate PC, stairway, potions, gold, enemies
+        // load chambers based on coordinates.txt
+        // stored as vector of shared_ptrs to cells
+        // use get random chamber and get random cell
+        // to generate PC, stairway, potions, gold, enemies
     }
 }
 
@@ -189,6 +191,7 @@ exitCodes Game::startGame(std::string pcRace) {
                 words = extractWords(command);
             }
 
+            // assume command is safe to be executed
             exitCodes exitCode = interpretCommand(words);
             if (exitCode == Quit || exitCode == Restart) {
                 return exitCode;

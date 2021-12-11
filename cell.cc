@@ -2,10 +2,12 @@
 #include <iostream>
 
 Cell::Cell(int row, int col, char v) : row{row}, col{col}, val{v} {
-    if (v == '@' || isdigit(v) || isalpha(v)) {
+    if (v == '.' || v == '\\' || v == '@' || isdigit(v) || isalpha(v)) {
         trueVal = '.';
+        type = EmptyFloorTile;
     } else {
         trueVal = v;
+        type = NonFloorTile;
     }
 
     // convert val of Potion and Gold from custom files
@@ -39,4 +41,32 @@ char Cell::getVal() {
 
 void Cell::setVal(char c) {
     val = c;
+}
+
+void Cell::setTypeEmpty() {
+    playerPtr = nullptr;
+    potionPtr = nullptr;
+    goldPtr = nullptr;
+    enemyPtr = nullptr;
+    type = EmptyFloorTile;
+}
+
+void Cell::attachPlayer(std::shared_ptr<Player> ptr) {
+    playerPtr = ptr;
+    type = PlayerTile;
+}
+
+void Cell::attachPotion(std::shared_ptr<Potion> ptr) {
+    potionPtr = ptr;
+    type = PotionTile;
+}
+
+void Cell::attachGold(std::shared_ptr<Gold> ptr) {
+    goldPtr = ptr;
+    type = GoldTile;
+}
+
+void Cell::attachEnemy(std::shared_ptr<Enemy> ptr) {
+    enemyPtr = ptr;
+    type = EnemyTile;
 }
