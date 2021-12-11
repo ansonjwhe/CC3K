@@ -15,8 +15,10 @@ class NormalPile;
 class MerchantHoard;
 class DragonHoard;
 class Player: public Character {
+    int batk;
+    int bdef;
     public:
-        Player(int h, int a, int d, std::shared_ptr<Cell> pos);
+        Player(int h, int a, int d, std::shared_ptr<Cell> pos, int batk, int bdef);
         void displayStats();
         void strike(Enemy); // virtual
         void hitBy(Enemy); // virtual
