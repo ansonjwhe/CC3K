@@ -15,6 +15,8 @@ class NormalPile;
 class MerchantHoard;
 class DragonHoard;
 class Player: public Character {
+    int batk = 0;
+    int bdef = 0;
     public:
         Player(int h, int a, int d);
         void displayStats();
