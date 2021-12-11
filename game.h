@@ -10,7 +10,9 @@ class Game {
     std::string pcRace;
     const int numFloors = 5;
     Floor floors [5];
+    int curFloor;
     std::unique_ptr<Player> player;
+
     void interpretChar(std::shared_ptr<Cell> pos, char c);
     void loadPlainFloors(std::string fileName);
     void loadCustomFloors(std::string fileName);

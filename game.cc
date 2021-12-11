@@ -1,6 +1,7 @@
 #include "game.h"
 #include "floor.h"
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 
@@ -83,8 +84,11 @@ void Game::loadFloors(std::string fileName, bool isCustom) {
 
 exitCodes Game::startGame(std::string playerRace) {
     pcRace = playerRace;
+    curFloor = 0;
     for (int i=0; i<5; i++) {
         floors[i].draw();
+        std::cout << "Race: Shade Gold: 0" << std::setw(50) << "Floor 0" << std::endl;
+        player->displayStats();
     }
     return Win;
 }

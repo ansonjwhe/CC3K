@@ -4,12 +4,13 @@
 #include "character.h"
 
 class Player;
-
+class Drow;
+class Goblin;
 class Enemy: public Character {
     public:
         Enemy(int h, int a, int d, std::shared_ptr<Cell> pos); 
-        virtual void strike(Player) = 0;
-        virtual void hitBy(Player) = 0;
+        void strike(Player); // virtual
+        void hitBy(Player); // virtual
 };
 
 class Halfling: public Enemy {

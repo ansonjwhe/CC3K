@@ -17,6 +17,7 @@ class DragonHoard;
 class Player: public Character {
     public:
         Player(int h, int a, int d, std::shared_ptr<Cell> pos);
+        void displayStats();
         void strike(Enemy); // virtual
         void hitBy(Enemy); // virtual
         void consume(RH);
@@ -44,6 +45,8 @@ class Drow: public Player {
 class Vampire: public Player {
     public: 
         Vampire(std::shared_ptr<Cell> pos);
+        void strike(Enemy);
+        void hitBy(Enemy);
 };
 
 class Troll: public Player {
