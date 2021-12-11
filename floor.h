@@ -15,6 +15,7 @@ class Floor{
     const int numRows = 25;
     const int numCols = 79;
     std::shared_ptr<Cell> grid [25][79];
+    std::shared_ptr<Cell> stairway;
     // std::vector<Gold> goldVec;
     // std::vector<Potion> potionVec;
     // std::vector<Enemy> enemyVec;
@@ -25,10 +26,10 @@ class Floor{
         int getNumCols();
         std::shared_ptr<Cell> getCell(int row, int col);
         void setCell(int row, int col, char c);
-        void movePlayer(Player, std::string dir);
+        void movePlayer(Player &, std::string dir);
         Cell getRandomAdjacentCell(Cell);
         int getRandomChamber(int playerChamber);
-        bool isPCOnStairway(Player);
+        bool isPCOnStairway(Player &);
         void draw();
 };
 
