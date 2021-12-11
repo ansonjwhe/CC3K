@@ -2,7 +2,7 @@
 #include "player.h"
 #include "character.h"
 
-Enemy::Enemy(int h, int a, int d) : Character(h, a, d) {}
+Enemy::Enemy(int h, int a, int d, std::shared_ptr<Cell> pos) : Character(h, a, d, pos) {}
 Halfling::Halfling() : Enemy(100, 15, 20) {}
 Human::Human() : Enemy(140, 20, 20) {}
 Dwarf::Dwarf() : Enemy(100, 20, 30) {}

@@ -6,6 +6,29 @@
 
 Game::Game() {}
 
+void Game::interpretChar(std::shared_ptr<Cell> pos, char c) {
+    switch (c) {
+        case '@':
+            if (pcRace == "s") {
+                player = std::make_unique<Shade>(pos);
+            } else if (pcRace == "d") {
+                player = std::make_unique<Drow>(pos);
+            } else if (pcRace == "v") {
+                player = std::make_unique<Vampire>(pos);
+            } else if (pcRace == "t") {
+                player = std::make_unique<Troll>(pos);
+            } else if (pcRace == "g") {
+                player = std::make_unique<Goblin>(pos);
+            }
+            break;
+        case '\\':
+            // generate stairway
+            break;
+        default:
+            break;
+    }
+}
+
 void Game::loadPlainFloors(std::string fileName) {
     std::ifstream ifs;
     std::string line;
@@ -38,6 +61,7 @@ void Game::loadCustomFloors(std::string fileName) {
             for (int j=0; j<floors[floorNum].getNumCols(); j++) {
                 iss >> std::noskipws >> c;
                 floors[floorNum].setCell(i, j, c);
+                interpretChar(floors[floorNum].getCell(i, j), c);
             }
         }
     }
@@ -46,14 +70,19 @@ void Game::loadCustomFloors(std::string fileName) {
 void Game::loadFloors(std::string fileName, bool isCustom) {
     if (isCustom) {
         loadCustomFloors(fileName);
+        
     } else {
         loadPlainFloors(fileName);
+        // call victor's algorithm for generating chambers
+        // iterate through each cell in a floor
+        // if a cell is a "valid" floor tile (may by @, \, 0, 1, etc.)
         // generate PC, stairway, potions, gold, enemies
     }
 }
 
 
 exitCodes Game::startGame(std::string playerRace) {
+    pcRace = playerRace;
     for (int i=0; i<5; i++) {
         floors[i].draw();
     }

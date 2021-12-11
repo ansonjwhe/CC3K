@@ -4,16 +4,27 @@
 #include "character.h"
 class Enemy;
 
+class RH;
+class BA;
+class BD;
+class PH;
+class WA;
+class WD;
+class SmallPile;
+class NormalPile;
+class MerchantHoard;
+class DragonHoard;
 class Player: public Character {
     public:
-        Player(char playerRace, int h, int a, int d);
-        virtual void strike(Enemy) = 0;
-        virtual void hitBy(Enemy) = 0;
+        Player(int h, int a, int d, std::shared_ptr<Cell> pos);
+        void strike(Enemy); // virtual
+        void hitBy(Enemy); // virtual
         void consume(RH);
         void consume(BA);
         void consume(BD);
         void consume(PH);
         void consume(WA);
+        void consume(WD);
         void consume(SmallPile);
         void consume(NormalPile);
         void consume(MerchantHoard);
@@ -22,26 +33,26 @@ class Player: public Character {
 
 class Shade: public Player {
     public: 
-        Shade();
-}
+        Shade(std::shared_ptr<Cell> pos);
+};
 
 class Drow: public Player {
     public: 
-        Drow();
-}
+        Drow(std::shared_ptr<Cell> pos);
+};
 
 class Vampire: public Player {
     public: 
-        Vampire();
-}
+        Vampire(std::shared_ptr<Cell> pos);
+};
 
 class Troll: public Player {
     public: 
-        Troll();
-}
+        Troll(std::shared_ptr<Cell> pos);
+};
 
 class Goblin: public Player {
     public: 
-        Goblin();
-}
+        Goblin(std::shared_ptr<Cell> pos);
+};
 #endif
