@@ -17,15 +17,27 @@ class MerchantHoard;
 class DragonHoard;
 class Player : public Character
 {
-    int batk = 0;
-    int bdef = 0;
+    int atkModifier = 0;
+    int defModifier = 0;
     int score = 0; // increments with gold, never decreases
     int gold = 0;  // can decrease when buying from merchant
 public:
-    Player(int h, int a, int d);
+    Player(std::string race, int maxHP, int h, int a, int d);
+
+    int getGold();
+    void addGold(int v);
+    int getScore();
+    int getAtkModifier();
+    int getDefModifier();
+
     void displayStats();
+
+    void applyAtkModifier(int a);
+    void applyDefModifier(int d);
+    int calcDmg(int enemyDef);
     virtual void strike(Enemy &e) = 0;
     virtual void hitBy(Enemy &e) = 0;
+
     void consume(RH &r);
     void consume(BA &b);
     void consume(BD &b);
@@ -36,41 +48,43 @@ public:
     void consume(NormalPile &n);
     void consume(MerchantHoard &m);
     void consume(DragonHoard &d);
-    int getGold();
-    int getScore();
 };
 
-class Shade : public Player
-{
-public:
-    Shade();
+class Shade: public Player {
+    public: 
+        Shade();
+        void strike(Enemy & e);
+        void hitBy(Enemy & e);
 };
 
-class Drow : public Player
-{
-public:
-    Drow();
+class Drow: public Player {
+    public: 
+        Drow();
+        void strike(Enemy & e);
+        void hitBy(Enemy & e);
 };
 
-class Vampire : public Player
-{
-public:
-    Vampire();
-    void strike(Dwarf &d);
-    void strike(Enemy &e);
-    void hitBy(Enemy &e);
+class Dwarf;
+class Vampire: public Player {
+    public: 
+        Vampire();
+        void strike(Dwarf & d);
+        void strike(Enemy & e);
+        void hitBy(Enemy & e);
 };
 
-class Troll : public Player
-{
-public:
-    Troll();
+class Troll: public Player {
+    public: 
+        Troll();
+        void strike(Enemy & e);
+        void hitBy(Enemy & e);
 };
 
-class Goblin : public Player
-{
-public:
-    Goblin();
+class Goblin: public Player {
+    public: 
+        Goblin();
+        void strike(Enemy & e);
+        void hitBy(Enemy & e);
 };
 
 #endif

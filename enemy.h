@@ -9,9 +9,13 @@ class Goblin;
 class Enemy : public Character
 {
 public:
-    Enemy(int h, int a, int d, std::shared_ptr<Cell> pos);
+    Enemy(std::string race, int maxHP, int h, int a, int d, std::shared_ptr<Cell> pos);
+
+    int calcDmg(int playerDef);
+    int getDef();
     virtual void strike(Player &p) = 0; // virtual
     virtual void hitBy(Player &p) = 0;  // virtual
+
     static std::shared_ptr<Enemy> getRandEnemy(std::shared_ptr<Cell>);
 };
 

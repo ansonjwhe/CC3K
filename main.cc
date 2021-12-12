@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include "game.h"
 
 std::string promptPC() {
@@ -51,7 +52,7 @@ bool interpretExitCode(exitCodes exitCode, int score) {
 }
 
 int main(int argc, char** argv) {
-
+    srand(time(NULL));
     std::string selectedPC;
 
     while (true) {

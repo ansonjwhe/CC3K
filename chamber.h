@@ -3,11 +3,11 @@
 #include <memory>
 #include <vector>
 
-#include "cell.h"
+class Cell;
 
 class Chamber
 {
-  std::vector<std::shared_ptr<Cell> > cells;
+  std::vector<std::shared_ptr<Cell>> cells;
 
 public:
   void addCell(std::shared_ptr<Cell>);

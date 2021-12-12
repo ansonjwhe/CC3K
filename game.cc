@@ -1,12 +1,15 @@
-#include "game.h"
+
 
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 
-#include "chamber.h"
+#include "game.h"
+#include "player.h"
 #include "floor.h"
+#include "chamber.h"
+#include "cell.h"
 #include "enemy.h"
 
 Game::Game() {}
@@ -90,6 +93,34 @@ void Game::loadPlainFloors(std::string fileName)
   }
 }
 
+void Game::generateChambersAndObjects()
+{
+  const std::string plainFloorChamberCoordinates = "coordinates.txt";
+  for (int i = 0; i < numFloors; i++)
+  {
+    std::ifstream ifs;
+    std::string line;
+    int rowCoordinate;
+    int colCoordinate;
+
+    ifs.open(plainFloorChamberCoordinates);
+    int currChamber = 0;
+    while (std::getline(ifs, line))
+    {
+      if (line != "chamber")
+      {
+        std::istringstream iss(line);
+        iss >> rowCoordinate;
+        iss >> colCoordinate;
+        floors[i].addCellToChamber(floors[i].getCell(rowCoordinate, colCoordinate), currChamber);
+      } else {
+        currChamber++;
+      }
+    }
+    floors[i].populateFloor();
+  }
+}
+
 void Game::loadCustomFloors(std::string fileName)
 {
   std::ifstream ifs;
@@ -124,42 +155,8 @@ void Game::loadFloors(std::string fileName, bool isCustom)
   }
   else
   {
-    const std::string plainFloorCoordinates = "coordinates.txt";
     loadPlainFloors(fileName);
-    for (int i = 0; i < numFloors; i++)
-    {
-      std::ifstream ifs;
-      std::string line;
-      ifs.open(plainFloorCoordinates);
-      int currChamber = 0;
-      while (std::getline(ifs, line))
-      {
-        Chamber chamber = Chamber();
-        while (line != "chamber")
-        {
-          std::istringstream iss(line);
-          std::string coordinate;
-          std::vector<int> coordinates;
-          for (int j = 0; j < 2; j++)
-          {
-            iss >> coordinate;
-            coordinates.push_back((std::stoi(coordinate)));
-          }
-          floors[i].addCellToChamber(floors[i].getCell(coordinates[0], coordinates[1]), currChamber);
-        }
-        currChamber++;
-      }
-      for (int i = 0; i < numFloors; i++)
-      {
-        floors[i].populateFloor();
-      }
-    }
-
-    // std::make_shared<Cell>;
-    // load chambers based on coordinates.txt
-    // stored as vector of shared_ptrs to cells
-    // use get random chamber and get random cell
-    // to generate PC, stairway, potions, gold, enemies
+    generateChambersAndObjects();
   }
 }
 
@@ -167,27 +164,22 @@ void Game::setPlayer(std::string pcRace)
 {
   if (pcRace == "s")
   {
-    playerRace = "Shade";
     player = std::make_shared<Shade>();
   }
   else if (pcRace == "d")
   {
-    playerRace = "Drow";
     player = std::make_shared<Drow>();
   }
   else if (pcRace == "v")
   {
-    playerRace = "Vampire";
     player = std::make_shared<Vampire>();
   }
   else if (pcRace == "t")
   {
-    playerRace = "Troll";
     player = std::make_shared<Troll>();
   }
   else if (pcRace == "g")
   {
-    playerRace = "Goblin";
     player = std::make_shared<Goblin>();
   }
 }
@@ -195,8 +187,8 @@ void Game::setPlayer(std::string pcRace)
 void Game::drawTurn()
 {
   floors[curFloor].draw();
-  std::cout << "Race: " << playerRace << "      Gold: " << player->getGold();
-  std::cout << std::setw(60 - playerRace.length() -
+  std::cout << "Race: " << player->getRace() << "      Gold: " << player->getGold();
+  std::cout << std::setw(60 - player->getRace().length() -
                          std::to_string(player->getGold()).length());
   std::cout << "Floor " << curFloor + 1 << std::endl;
   player->displayStats();
@@ -228,7 +220,7 @@ bool Game::isValidCommand(std::vector<std::string> words)
   {
     if (isDirectional(words[0]))
     {
-      if (floors[curFloor].isValidMove(player->getPos(), words[0]))
+      if (floors[curFloor].isValidPlayerMove(player->getPos(), words[0]))
       {
         return true;
       }
@@ -239,7 +231,7 @@ bool Game::isValidCommand(std::vector<std::string> words)
         std::cout << "stairway(\\), or gold(G)." << std::endl;
       }
     }
-    else if (words[0] == "f" || words[0] == "r" || words[0] == "q")
+    else if (words[0] == "f" || words[0] == "r" || words[0] == "q" || words[0] == "NEXT")
     {
       return true;
     }
@@ -250,18 +242,24 @@ bool Game::isValidCommand(std::vector<std::string> words)
     {
       if (isDirectional(words[1]))
       {
-        // if specified direction has potion, return true
-        // else
-        // std::cout << "No potion found in specified direction." << std::endl;
+        std::shared_ptr<Cell> newPos = floors[curFloor].getCellInDirection(player->getPos(), words[1]);
+        if (newPos->getCellType() == PotionTile) {
+          return true;
+        } else {
+          std::cout << "No potion found in specified direction." << std::endl;
+        }
       }
     }
     else if (words[0] == "a")
     {
       if (isDirectional(words[1]))
       {
-        // if specified direction has enemy, return true
-        // else
-        // std::cout << "No enemy found in specified direction." << std::endl;
+        std::shared_ptr<Cell> newPos = floors[curFloor].getCellInDirection(player->getPos(), words[1]);
+        if (newPos->getCellType() == EnemyTile) {
+          return true;
+        } else {
+          std::cout << "No enemy found in specified direction." << std::endl;
+        }
       }
     }
   }
@@ -275,7 +273,7 @@ exitCodes Game::interpretCommand(std::vector<std::string> words)
   {
     if (isDirectional(words[0]))
     {
-      player->setPos(floors[curFloor].movePlayer(player->getPos(), words[0]));
+      floors[curFloor].movePlayer(player, words[0]);
       // process consume gold
     }
     else if (words[0] == "f")
@@ -290,10 +288,11 @@ exitCodes Game::interpretCommand(std::vector<std::string> words)
     else if (words[0] == "q")
     {
       return Quit;
+    } else if (words[0] == "NEXT") {
+      floors[curFloor].setStairway(player->getPos());
     }
   }
-  else if (words.size() ==
-           2)
+  else if (words.size() == 2)
   { // assume words[1] is a valid direction and has potion/enemy
     if (words[0] == "u")
     {
@@ -315,6 +314,7 @@ exitCodes Game::startGame(std::string pcRace)
   {
     curFloor = i;
     player->setPos(floors[i].getStart());
+    floors[i].getStart()->attachPlayer(player);
     while (!floors[i].isPCOnStairway(player->getPos()))
     {
       drawTurn();

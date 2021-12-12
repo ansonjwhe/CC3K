@@ -29,7 +29,8 @@ class Cell {
         char getVal();
         void setVal(char c);
 
-        void setTypeEmpty();
+        cellType getCellType();
+        void setTypeToTrueVal();
         void attachPlayer(std::shared_ptr<Player> ptr);
         void attachPotion(std::shared_ptr<Potion> ptr);
         void attachGold(std::shared_ptr<Gold> ptr);

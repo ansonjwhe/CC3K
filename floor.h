@@ -19,24 +19,24 @@ class Floor
     std::shared_ptr<Cell> grid[25][79];
     std::shared_ptr<Cell> stairway;
     std::shared_ptr<Cell> start;
-    // std::vector<Gold> goldVec;
-    // std::vector<Potion> potionVec;
+    const int numPotionsGenerated = 10;
+    const int numGoldGenerated = 10;
+    const int numEnemiesGenerated = 20;
     std::vector<std::shared_ptr<Enemy>> enemyVec;
 
 public:
-    Floor();
     int getNumRows();
     int getNumCols();
 
     std::shared_ptr<Cell> getCell(int row, int col);
     void addCellToChamber(std::shared_ptr<Cell>, int);
     void setCell(int row, int col, char c);
-
-    bool isValidMove(std::shared_ptr<Cell> pos, std::string dir);
-    std::shared_ptr<Cell> movePlayer(std::shared_ptr<Cell> pos, std::string dir);
+    std::shared_ptr<Cell> getCellInDirection(std::shared_ptr<Cell> pos, std::string dir);
+    bool isValidPlayerMove(std::shared_ptr<Cell> pos, std::string dir);
+    void movePlayer(std::shared_ptr<Player> player, std::string dir);
 
     Cell getRandomAdjacentCell(Cell);
-    int getRandomChamber(int playerChamber);
+    int getRandomStairwayChamber(int playerChamber);
     void populateFloor();
 
     std::shared_ptr<Cell> getStart();

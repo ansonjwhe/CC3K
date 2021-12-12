@@ -3,11 +3,11 @@
 
 #include <memory>
 #include "floor.h"
-#include "player.h"
+
+class Player;
 
 enum exitCodes { Continue, Lose, Win, Restart, Quit };
 class Game {
-    std::string playerRace;
     const int numFloors = 5;
     Floor floors [5];
     int curFloor;
@@ -16,6 +16,7 @@ class Game {
     void setPlayer(std::string pcRace);
     void interpretChar(int floorNum, std::shared_ptr<Cell> pos, char c);
     void loadPlainFloors(std::string fileName);
+    void generateChambersAndObjects();
     void loadCustomFloors(std::string fileName);
     void drawTurn();
     bool isValidCommand(std::vector<std::string> words);

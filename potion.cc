@@ -11,10 +11,9 @@ PH::PH(std::shared_ptr<Cell> pos) : Potion{-10, pos} {}
 WA::WA(std::shared_ptr<Cell> pos) : Potion{-5, pos} {}
 WD::WD(std::shared_ptr<Cell> pos) : Potion{-5, pos} {}
 
-static std::shared_ptr<Potion> getRandPotion(std::shared_ptr<Cell> pos)
+std::shared_ptr<Potion> Potion::getRandPotion(std::shared_ptr<Cell> pos)
 {
-    int potion = rand() % 6;
-    switch (potion)
+    switch (rand() % 6)
     {
     case 0:
         return std::make_shared<RH>(pos);
@@ -27,6 +26,31 @@ static std::shared_ptr<Potion> getRandPotion(std::shared_ptr<Cell> pos)
     case 4:
         return std::make_shared<WA>(pos);
     case 5:
+    default:
         return std::make_shared<WD>(pos);
     }
+}
+
+void RH::consumedBy(std::shared_ptr<Player> player) {
+    player->consume(*this);
+}
+
+void BA::consumedBy(std::shared_ptr<Player> player) {
+    player->consume(*this);
+}
+
+void BD::consumedBy(std::shared_ptr<Player> player) {
+    player->consume(*this);
+}
+
+void PH::consumedBy(std::shared_ptr<Player> player) {
+    player->consume(*this);
+}
+
+void WA::consumedBy(std::shared_ptr<Player> player) {
+    player->consume(*this);
+}
+
+void WD::consumedBy(std::shared_ptr<Player> player) {
+    player->consume(*this);
 }

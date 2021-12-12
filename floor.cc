@@ -8,22 +8,9 @@
 #include "chamber.h"
 #include "potion.h"
 #include "gold.h"
+#include "player.h"
+#include "enemy.h"
 
-Floor::Floor()
-{
-    // std::ifstream map;
-    // std::string line;
-    // char c;
-    // map.open("./plain.txt");
-    // for (int i=0; i<numRows; i++) {
-    //     std::getline(map, line);
-    //     std::istringstream iss{line};
-    //     for (int j=0; j<numCols; j++) {
-    //         iss >> std::noskipws >> c;
-    //         grid[i][j] = std::make_shared<Cell>(c);
-    //     }
-    // }
-}
 
 int Floor::getNumRows() { return numRows; }
 
@@ -44,7 +31,7 @@ void Floor::addCellToChamber(std::shared_ptr<Cell> cell, int chamberNum)
     chambers[chamberNum].addCell(cell);
 }
 
-int Floor::getRandomChamber(int playerChamber)
+int Floor::getRandomStairwayChamber(int playerChamber)
 {
     std::vector<int> chambers;
     for (int i = 0; i < 5; i++)
@@ -70,6 +57,7 @@ void Floor::setStart(std::shared_ptr<Cell> pos)
 void Floor::setStairway(std::shared_ptr<Cell> pos)
 {
     stairway = pos;
+    pos->setVal('\\');
 }
 
 bool Floor::isPCOnStairway(std::shared_ptr<Cell> pos)
@@ -77,82 +65,84 @@ bool Floor::isPCOnStairway(std::shared_ptr<Cell> pos)
     return stairway == pos;
 }
 
-std::array<int, 2> interpretDirection(std::string dir)
+std::shared_ptr<Cell> Floor::getCellInDirection(std::shared_ptr<Cell> pos, std::string dir)
 {
-    std::array<int, 2> result;
+    int deltaRow;
+    int deltaCol;
     if (dir == "no")
     {
-        result[0] = -1;
-        result[1] = 0;
+        deltaRow = -1;
+        deltaCol = 0;
     }
     else if (dir == "so")
     {
-        result[0] = 1;
-        result[1] = 0;
+        deltaRow = 1;
+        deltaCol = 0;
     }
     else if (dir == "ea")
     {
-        result[0] = 0;
-        result[1] = 1;
+        deltaRow = 0;
+        deltaCol = 1;
     }
     else if (dir == "we")
     {
-        result[0] = 0;
-        result[1] = -1;
+        deltaRow = 0;
+        deltaCol = -1;
     }
     else if (dir == "ne")
     {
-        result[0] = -1;
-        result[1] = 1;
+        deltaRow = -1;
+        deltaCol = 1;
     }
     else if (dir == "nw")
     {
-        result[0] = -1;
-        result[1] = -1;
+        deltaRow = -1;
+        deltaCol = -1;
     }
     else if (dir == "se")
     {
-        result[0] = 1;
-        result[1] = 1;
+        deltaRow = 1;
+        deltaCol = 1;
     }
     else if (dir == "sw")
     {
-        result[0] = 1;
-        result[1] = -1;
+        deltaRow = 1;
+        deltaCol = -1;
     }
-    return result;
-}
-
-bool Floor::isValidMove(std::shared_ptr<Cell> pos, std::string dir)
-{
-    std::array<int, 2> dirInts = interpretDirection(dir);
-    int deltaRow = dirInts[0];
-    int deltaCol = dirInts[1];
     int row = pos->getRow();
     int col = pos->getCol();
+    return grid[row + deltaRow][col + deltaCol];    
+}
+
+bool Floor::isValidPlayerMove(std::shared_ptr<Cell> pos, std::string dir)
+{
+    std::shared_ptr<Cell> newPos = getCellInDirection(pos, dir);
 
     // get val in specified direction
-    char val = grid[row + deltaRow][col + deltaCol]->getVal();
+    char val = newPos->getVal();
     return (val == '.') || (val == '+') || (val == '#') || (val == '\\') || (val == 'G');
 }
 
-std::shared_ptr<Cell> Floor::movePlayer(std::shared_ptr<Cell> pos, std::string dir)
+void Floor::movePlayer(std::shared_ptr<Player> player, std::string dir)
 {
-    std::array<int, 2> dirInts = interpretDirection(dir);
-    int deltaRow = dirInts[0];
-    int deltaCol = dirInts[1];
-    int row = pos->getRow();
-    int col = pos->getCol();
-
-    // set prev player position to true val (either '.', '+', or '#')
-    pos->setVal(pos->getTrueVal());
+    // get old player position
+    std::shared_ptr<Cell> pos = player->getPos();
 
     // get new player position
-    std::shared_ptr<Cell> newPos = grid[row + deltaRow][col + deltaCol];
+    std::shared_ptr<Cell> newPos = getCellInDirection(pos, dir);
 
-    // set player position val to '@'
+    // set old player position to true val (either '.', '+', or '#')
+    // and set cellType to EmptyTile
+    pos->setVal(pos->getTrueVal());
+    pos->setTypeToTrueVal();
+
+    // set newPos val to '@'
+    // and attach player
     newPos->setVal('@');
-    return newPos;
+    newPos->attachPlayer(player);
+
+    // update player position property
+    player->setPos(newPos);
 }
 
 void Floor::draw()
@@ -173,32 +163,38 @@ void Floor::addEnemy(std::shared_ptr<Enemy> e) {
 // Handle all generic generation
 void Floor::populateFloor()
 {
-    // populate floor with everything but player
+    // generate player spawn location
     int playerChamber = rand() % 5;
     setStart(chambers[playerChamber].getRandomEmptyCell());
-    setStairway(chambers[getRandomChamber(playerChamber)].getRandomEmptyCell());
+
+    // generate stairway location
+    setStairway(chambers[getRandomStairwayChamber(playerChamber)].getRandomEmptyCell());
+
     // generate potions
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < numPotionsGenerated; i++)
     {
         int randomChamber = rand() % 5;
         std::shared_ptr<Cell> newPos = chambers[randomChamber].getRandomEmptyCell();
         std::shared_ptr<Potion> potion = Potion::getRandPotion(newPos);
-        chambers[randomChamber].getRandomEmptyCell()->attachPotion(potion);
+        newPos->attachPotion(potion);
     }
+
     // generate gold
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < numGoldGenerated; i++)
     {
         int randomChamber = rand() % 5;
         std::shared_ptr<Cell> newPos = chambers[randomChamber].getRandomEmptyCell();
         std::shared_ptr<Gold> gold = Gold::getRandGold(newPos);
-        chambers[randomChamber].getRandomEmptyCell()->attachGold(gold);
+        newPos->attachGold(gold);
     }
+
     // spawn enemies
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < numEnemiesGenerated; i++)
     {
         int randomChamber = rand() % 5;
         std::shared_ptr<Cell> newPos = chambers[randomChamber].getRandomEmptyCell();
         std::shared_ptr<Enemy> enemy = Enemy::getRandEnemy(newPos);
-        chambers[randomChamber].getRandomEmptyCell()->attachEnemy(enemy);
+        newPos->attachEnemy(enemy);
+        addEnemy(enemy);
     }
 }

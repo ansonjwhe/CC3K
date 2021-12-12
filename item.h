@@ -1,15 +1,18 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include "player.h"
 #include <memory>
 
+class Player;
+class Cell;
 class Item{
-  int val;
-  std::shared_ptr<Cell> pos;
+  protected:
+    int val;
+    std::shared_ptr<Cell> pos;
   public:
     Item(int v, std::shared_ptr<Cell> pos);
-    virtual void consumedBy(Player) = 0;  
+    virtual void consumedBy(std::shared_ptr<Player>) = 0;
+    int getVal();
 };
 
 #endif
