@@ -37,6 +37,7 @@ public:
 
     Cell getRandomAdjacentCell(Cell);
     int getRandomChamber(int playerChamber);
+    void populateFloor();
 
     std::shared_ptr<Cell> getStart();
     void setStart(std::shared_ptr<Cell> pos);

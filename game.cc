@@ -149,6 +149,10 @@ void Game::loadFloors(std::string fileName, bool isCustom)
         }
         currChamber++;
       }
+      for (int i = 0; i < numFloors; i++)
+      {
+        floors[i].populateFloor();
+      }
     }
 
     // std::make_shared<Cell>;
