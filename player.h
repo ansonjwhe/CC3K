@@ -22,18 +22,18 @@ class Player: public Character {
     public:
         Player(int h, int a, int d);
         void displayStats();
-        void strike(Enemy); // virtual
-        void hitBy(Enemy); // virtual
-        void consume(RH);
-        void consume(BA);
-        void consume(BD);
-        void consume(PH);
-        void consume(WA);
-        void consume(WD);
-        void consume(SmallPile);
-        void consume(NormalPile);
-        void consume(MerchantHoard);
-        void consume(DragonHoard);
+        virtual void strike(Enemy & e) = 0;
+        virtual void hitBy(Enemy & e) = 0;
+        void consume(RH & r);
+        void consume(BA & b);
+        void consume(BD & b);
+        void consume(PH & p);
+        void consume(WA & w);
+        void consume(WD & w);
+        void consume(SmallPile & s);
+        void consume(NormalPile & n);
+        void consume(MerchantHoard & m);
+        void consume(DragonHoard & d);
         int getGold();
         int getScore();
 };
@@ -51,8 +51,9 @@ class Drow: public Player {
 class Vampire: public Player {
     public: 
         Vampire();
-        void strike(Enemy);
-        void hitBy(Enemy);
+        void strike(Dwarf & d);
+        void strike(Enemy & e);
+        void hitBy(Enemy & e);
 };
 
 class Troll: public Player {
@@ -64,4 +65,5 @@ class Goblin: public Player {
     public: 
         Goblin();
 };
+
 #endif

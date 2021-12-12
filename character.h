@@ -17,6 +17,7 @@ class Character {
         int getDef();
         std::shared_ptr<Cell> getPos();
         void setPos(std::shared_ptr<Cell> p);
+        void changeHp(int n);
 };
 
 #endif

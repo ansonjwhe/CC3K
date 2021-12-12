@@ -1,6 +1,7 @@
 #include "player.h"
 #include "enemy.h"
 #include <iostream>
+#include <math.h>
 
 Player::Player(int h, int a, int d) : Character{h, a, d} {}
 Shade::Shade(): Player{125, 25, 25} {}
@@ -23,10 +24,11 @@ int Player::getScore() {
     return score;
 }
 
-void Vampire::strike(Enemy e) {
-
+void Vampire::strike(Enemy & e) {
+    int dmg = ceil(100 / (100 + e.getDef())) * atk;
+    e.changeHp(dmg);
 }
 
-void Vampire::hitBy(Enemy e) {
-
+void Vampire::hitBy(Enemy & e) {
+    e.strike(*this);
 }
