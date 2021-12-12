@@ -164,3 +164,7 @@ void Floor::draw()
         std::cout << std::endl;
     }
 }
+
+void Floor::addEnemy(std::shared_ptr<Enemy> e) {
+    enemyVec.push_back(e);
+}

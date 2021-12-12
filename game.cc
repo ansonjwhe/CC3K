@@ -7,6 +7,7 @@
 
 #include "chamber.h"
 #include "floor.h"
+#include "enemy.h"
 
 Game::Game() {}
 
@@ -20,8 +21,48 @@ void Game::interpretChar(int floorNum, std::shared_ptr<Cell> pos, char c)
   case '\\':
     floors[floorNum].setStairway(pos);
     break;
+  case 'H':
+    {
+      std::shared_ptr<Enemy> h = std::make_shared<Human>(pos);
+      floors[floorNum].addEnemy(h);
+      break;
+    }
+  case 'W':
+    {
+      std::shared_ptr<Enemy> w = std::make_shared<Dwarf>(pos);
+      floors[floorNum].addEnemy(w);
+      break;
+    }
   case 'E':
-    // initialize enemy
+    {
+      std::shared_ptr<Enemy> e = std::make_shared<Elf>(pos);
+      floors[floorNum].addEnemy(e);
+      break;
+    }
+  case 'O':
+    {
+      std::shared_ptr<Enemy> o = std::make_shared<Merchant>(pos);
+      floors[floorNum].addEnemy(o);
+      break;
+    }
+  case 'M':
+    {
+      std::shared_ptr<Enemy> m = std::make_shared<Human>(pos);
+      floors[floorNum].addEnemy(m);
+      break;
+    }
+  case 'D':
+    {
+      std::shared_ptr<Enemy> d = std::make_shared<Dragon>(pos);
+      floors[floorNum].addEnemy(d);
+      break;
+    }
+  case 'L':
+    {
+      std::shared_ptr<Enemy> l = std::make_shared<Halfling>(pos);
+      floors[floorNum].addEnemy(l);
+      break;
+    }
   default:
     break;
   }

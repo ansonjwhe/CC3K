@@ -21,7 +21,7 @@ class Floor
     std::shared_ptr<Cell> start;
     // std::vector<Gold> goldVec;
     // std::vector<Potion> potionVec;
-    // std::vector<Enemy> enemyVec;
+    std::vector<std::shared_ptr<Enemy>> enemyVec;
 
 public:
     Floor();
@@ -44,6 +44,8 @@ public:
     bool isPCOnStairway(std::shared_ptr<Cell> pos);
 
     void draw();
+
+    void addEnemy(std::shared_ptr<Enemy> e);
 };
 
 #endif
