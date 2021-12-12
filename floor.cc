@@ -164,3 +164,10 @@ void Floor::draw()
         std::cout << std::endl;
     }
 }
+
+void Floor::populateFloor()
+{
+    int playerChamber = rand() % 5;
+    setStart(chambers[playerChamber].getRandomEmptyCell());
+    setStairway(chambers[getRandomChamber(playerChamber)].getRandomEmptyCell());
+}
