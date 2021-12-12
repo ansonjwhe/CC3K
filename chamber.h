@@ -1,12 +1,17 @@
 #ifndef CHAMBER_H
 #define CHAMBER_H
-#include "cell.h"
-#include <vector>
 #include <memory>
+#include <vector>
 
-class Chamber{
-    std::vector<std::shared_ptr<Cell>> cells;
-    std::shared_ptr<Cell> getRandomEmptyCell(int chamber);
+#include "cell.h"
+
+class Chamber
+{
+  std::vector<std::shared_ptr<Cell> > cells;
+
+public:
+  void addCell(std::shared_ptr<Cell>);
+  std::shared_ptr<Cell> getRandomEmptyCell();
 };
 
 #endif
