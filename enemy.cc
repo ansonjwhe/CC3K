@@ -12,104 +12,159 @@ Orcs::Orcs(std::shared_ptr<Cell> pos) : Enemy{180, 30, 25, pos} {}
 Merchant::Merchant(std::shared_ptr<Cell> pos) : Enemy{30, 70, 5, pos} {}
 Dragon::Dragon(std::shared_ptr<Cell> pos) : Enemy{150, 20, 20, pos} {}
 
-void Halfling::strike(Player & p) {
+void Halfling::strike(Player &p)
+{
     int random = rand() % 2;
-    if (random == 0) {
+    if (random == 0)
+    {
         int dmg = ceil(100 / (100 + p.getDef())) * atk;
         p.changeHp(dmg);
     }
 }
 
-void Halfling::hitBy(Player & p) {
+void Halfling::hitBy(Player &p)
+{
     p.strike(*this);
 }
 
-void Human::strike(Player & p) {
+void Human::strike(Player &p)
+{
     int random = rand() % 2;
-    if (random == 0) {
+    if (random == 0)
+    {
         int dmg = ceil(100 / (100 + p.getDef())) * atk;
         p.changeHp(dmg);
     }
 }
 
-void Human::hitBy(Player & p) {
+void Human::hitBy(Player &p)
+{
     p.strike(*this);
 }
 
-void Dwarf::strike(Player & p) {
+void Dwarf::strike(Player &p)
+{
     int random = rand() % 2;
-    if (random == 0) {
+    if (random == 0)
+    {
         int dmg = ceil(100 / (100 + p.getDef())) * atk;
         p.changeHp(dmg);
     }
 }
 
-void Dwarf::hitBy(Player & p) {
+void Dwarf::hitBy(Player &p)
+{
     p.strike(*this);
 }
 
-void Elf::strike(Drow & d) {
+void Elf::strike(Drow &d)
+{
     int random = rand() % 2;
-    if (random == 0) {
+    if (random == 0)
+    {
         int dmg = ceil(100 / (100 + d.getDef())) * atk;
         d.changeHp(dmg);
     }
 }
 
-void Elf::strike(Player & p) {
-    for (int i = 0; i < 2; i++) {
+void Elf::strike(Player &p)
+{
+    for (int i = 0; i < 2; i++)
+    {
         int random = rand() % 2;
-        if (random == 0) {
+        if (random == 0)
+        {
             int dmg = ceil(100 / (100 + p.getDef())) * atk;
             p.changeHp(dmg);
         }
     }
 }
 
-void Elf::hitBy(Player & p) {
+void Elf::hitBy(Player &p)
+{
     p.strike(*this);
 }
 
-void Orcs::strike(Goblin & g) {
+void Orcs::strike(Goblin &g)
+{
     int random = rand() % 2;
-    if (random == 0) {
+    if (random == 0)
+    {
         int dmg = ceil(100 / (100 + g.getDef())) * atk;
         g.changeHp(dmg * 3 / 2);
     }
 }
 
-void Orcs::strike(Player & p) {
+void Orcs::strike(Player &p)
+{
     int random = rand() % 2;
-    if (random == 0) {
+    if (random == 0)
+    {
         int dmg = ceil(100 / (100 + p.getDef())) * atk;
         p.changeHp(dmg);
     }
 }
 
-void Orcs::hitBy(Player & p) {
+void Orcs::hitBy(Player &p)
+{
     p.strike(*this);
 }
 
-void Merchant::strike(Player & p) {
+void Merchant::strike(Player &p)
+{
     int random = rand() % 2;
-    if (random == 0) {
+    if (random == 0)
+    {
         int dmg = ceil(100 / (100 + p.getDef())) * atk;
         p.changeHp(dmg);
     }
 }
 
-void Merchant::hitBy(Player & p) {
+void Merchant::hitBy(Player &p)
+{
     p.strike(*this);
 }
 
-void Dragon::strike(Player & p) {
+void Dragon::strike(Player &p)
+{
     int random = rand() % 2;
-    if (random == 0) {
+    if (random == 0)
+    {
         int dmg = ceil(100 / (100 + p.getDef())) * atk;
         p.changeHp(dmg);
     }
 }
 
-void Dragon::hitBy(Player & p) {
+void Dragon::hitBy(Player &p)
+{
     p.strike(*this);
+}
+
+static std::shared_ptr<Enemy> getRandEnemy(std::shared_ptr<Cell> pos)
+{
+    int enemy = rand() % 18;
+    if (enemy <= 3)
+    {
+        return std::make_shared<Human>(pos);
+    }
+    else if (enemy > 3 && enemy <= 6)
+    {
+        return std::make_shared<Dwarf>(pos);
+    }
+    else if (enemy > 6 && enemy <= 11)
+    {
+        return std::make_shared<Halfling>(pos);
+    }
+    else if (enemy > 11 && enemy <= 13)
+    {
+        return std::make_shared<Elf>(pos);
+    }
+    else if (enemy > 13 && enemy <= 15)
+    {
+        return std::make_shared<Orcs>(pos);
+    }
+    else
+    {
+        return std::make_shared<Merchant>(pos);
+    }
 }

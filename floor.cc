@@ -6,6 +6,8 @@
 #include "floor.h"
 #include "cell.h"
 #include "chamber.h"
+#include "potion.h"
+#include "gold.h"
 
 Floor::Floor()
 {
@@ -165,9 +167,35 @@ void Floor::draw()
     }
 }
 
+// Handle all generic generation
 void Floor::populateFloor()
 {
+    // populate floor with everything but player
     int playerChamber = rand() % 5;
     setStart(chambers[playerChamber].getRandomEmptyCell());
     setStairway(chambers[getRandomChamber(playerChamber)].getRandomEmptyCell());
+    // generate potions
+    for (int i = 0; i < 10; i++)
+    {
+        int randomChamber = rand() % 5;
+        std::shared_ptr<Cell> newPos = chambers[randomChamber].getRandomEmptyCell();
+        std::shared_ptr<Potion> potion = Potion::getRandPotion(newPos);
+        chambers[randomChamber].getRandomEmptyCell()->attachPotion(potion);
+    }
+    // generate gold
+    for (int i = 0; i < 10; i++)
+    {
+        int randomChamber = rand() % 5;
+        std::shared_ptr<Cell> newPos = chambers[randomChamber].getRandomEmptyCell();
+        std::shared_ptr<Gold> gold = Gold::getRandGold(newPos);
+        chambers[randomChamber].getRandomEmptyCell()->attachGold(gold);
+    }
+    // spawn enemies
+    for (int i = 0; i < 20; i++)
+    {
+        int randomChamber = rand() % 5;
+        std::shared_ptr<Cell> newPos = chambers[randomChamber].getRandomEmptyCell();
+        std::shared_ptr<Enemy> enemy = Enemy::getRandEnemy(newPos);
+        chambers[randomChamber].getRandomEmptyCell()->attachEnemy(enemy);
+    }
 }
